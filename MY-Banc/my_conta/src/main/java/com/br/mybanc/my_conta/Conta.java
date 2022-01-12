@@ -11,8 +11,17 @@ public class Conta<Cliente> {
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	private long idConta;
+	
+	@NonNull
+	private long idPessoa;
 	private double saldo = 0;
-	private Cliente idPessoa;
+	private double limiteSaqueDiario= 2000.0;
+	private boolean flagAtivo = false;
+	@NonNull
+	@Column(length = 4)
+	private long tipoConta;
+	@NonNull
+	private LocalDate dataCriacao = LocalDate.now();
 	
 	public Conta() {
 		
