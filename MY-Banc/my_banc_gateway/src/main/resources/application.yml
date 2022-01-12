@@ -1,0 +1,30 @@
+server:
+ port: 8084
+
+eureka:
+ client:
+  serviceUrl:
+   defaultZone: http://localhost:8083/eureka
+
+
+spring:
+ application:
+   name: gateway
+ cloud:
+   gateway:
+    routes:
+     - id: clienteModule
+       uri: lb://cliente-service
+       predicates:
+       - Path=/cliente/**
+
+     - id: contaModule
+       uri: lb://conta-service
+       predicates:
+       - Path=/conta/**
+
+     - id: transacaoModule
+       uri: lb://transacao-service
+       predicates:
+       - Path=/transacao/**
+
