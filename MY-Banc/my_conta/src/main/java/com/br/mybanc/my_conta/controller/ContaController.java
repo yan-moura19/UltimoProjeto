@@ -72,5 +72,80 @@ public class ContaController {
 		return model;
 		
 	}
+	@PutMapping(value ="/deposito/{id}")
+	public Conta deposito  (@PathVariable(value = "id") Long idConta,@RequestBody Conta conta,double valor) {
+		Optional<Conta> model = contaRepository.findById(idConta);
+		
+		if(model.isPresent()) {
+			Conta _conta =model.get();
+			_conta.setSaldo(_conta.getSaldo()+valor);
+			
+			transacaoRepository.save(idConta,valor, LocalDate.now());
+			return new Conta(contaRepository.save(_conta));
+			
+		}
+		return conta ;
+		
+	}
+	@GetMapping("/saldo/{id}")
+	public String saldoConta(@PathVariable(value = "id") Long idConta) {
+		Optional<Conta> model = contaRepository.findById(idConta);
+		
+		if(model.isPresent()) {
+			Conta _conta =model.get();
+			return String.valueOf(_conta.getSaldo()) ;
+		}else {
+		
+			return "não existe";
+		}
+	}
+	@PutMapping(value ="/saque/{id}")
+	public Conta saque  (@PathVariable(value = "id") Long idConta,@RequestBody Conta conta,double valor) {
+		Optional<Conta> model = contaRepository.findById(idConta);
+		
+		if(model.isPresent()) {
+			Conta _conta =model.get();
+			
+			if(_conta.isFlagAtivo()) {
+				if(_conta.getSaldo() > valor) {
+					_conta.setSaldo(_conta.getSaldo()-valor);
+					transacaoRepository.save(idConta,valor, LocalDate.now());
+					return new Conta(contaRepository.save(_conta));
+				}else {
+					return conta ;// sem saldo
+				}
+			}
+			else {
+				//bandeira não ativa
+			}
+				
+		}
+		return null;
+	}
+	
+	@PutMapping(value ="/bloqueio/{id}")
+	public Conta bloqueioConta  (@PathVariable(value = "id") Long idConta,@RequestBody Conta conta,double valor) {
+		Optional<Conta> model = contaRepository.findById(idConta);
+		
+		if(model.isPresent()) {
+			Conta _conta =model.get();
+			_conta.setFlagAtivo(false);
+			return new Conta(contaRepository.save(_conta));
+			
+		}
+		return null;
+	}
+	@PutMapping(value ="/desbloqueio/{id}")
+	public Conta desbloqueioConta  (@PathVariable(value = "id") Long idConta,@RequestBody Conta conta,double valor) {
+		Optional<Conta> model = contaRepository.findById(idConta);
+		
+		if(model.isPresent()) {
+			Conta _conta =model.get();
+			
+			_conta.setFlagAtivo(true);
+			return new Conta(contaRepository.save(_conta));
+		}
+		return null;
+	}
 	
 }
