@@ -1,2 +1,2 @@
-# Último projeto usando SpringBoot, h2 console, jpa, swagger, feign e java
-###### Ainda estou editando e otimizando
+#  Projeto usando SpringBoot, H2, JPA, Swagger, Feign e Java
+###### Ainda estou editando e otimizando, mas já tem uma boa estrutura!
